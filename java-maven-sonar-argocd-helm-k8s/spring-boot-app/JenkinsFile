@@ -58,7 +58,7 @@ pipeline {
         }
 
         stage('Update Deployment File') {
-            agent { label 'master' } // run on Jenkins master/agent where workspace exists
+            
             steps {
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                     dir('java-maven-sonar-argocd-helm-k8s') { // navigate to repo root
