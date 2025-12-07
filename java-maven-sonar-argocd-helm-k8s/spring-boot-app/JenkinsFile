@@ -18,7 +18,7 @@ pipeline {
         stage('Build and Test') {
             steps {
                 script {
-                    docker.image('shivakumarchincholi/maven-sample-docker-agent:v5').inside(
+                    docker.image('shivakumarchincholi/maven-sample-docker-agent:v6').inside(
                         '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                     ) {
                         sh '''
@@ -33,7 +33,7 @@ pipeline {
         stage('Static Code Analysis') {
             steps {
                 script {
-                    docker.image('shivakumarchincholi/maven-sample-docker-agent:v5').inside(
+                    docker.image('shivakumarchincholi/maven-sample-docker-agent:v6').inside(
                         '--user root'
                     ) {
                         withCredentials([string(credentialsId: 'sonarqube', variable: 'SONAR_AUTH_TOKEN')]) {
@@ -53,7 +53,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.image('shivakumarchincholi/maven-sample-docker-agent:v5').inside(
+                    docker.image('shivakumarchincholi/maven-sample-docker-agent:v6').inside(
                         '--user root -v /var/run/docker.sock:/var/run/docker.sock'
                     ) {
                         sh '''
