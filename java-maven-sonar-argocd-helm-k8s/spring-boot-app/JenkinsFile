@@ -13,6 +13,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -58,10 +59,10 @@ pipeline {
         }
 
         stage('Update Deployment File') {
-            
             steps {
+                checkout scm  // clone repo again
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                    dir('java-maven-sonar-argocd-helm-k8s') { // navigate to repo root
+                    dir('java-maven-sonar-argocd-helm-k8s') {
                         sh '''
                             git config user.email "schincholi08@gmail.com"
                             git config user.name "Shivakumar"
@@ -75,5 +76,6 @@ pipeline {
                 }
             }
         }
+
     } // stages
 } // pipeline
