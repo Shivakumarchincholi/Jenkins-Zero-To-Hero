@@ -59,6 +59,7 @@ pipeline {
         }
 
         stage('Update Deployment File') {
+            agent any     // run this stage outside docker
             steps {
                 checkout scm  // clone repo again
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
