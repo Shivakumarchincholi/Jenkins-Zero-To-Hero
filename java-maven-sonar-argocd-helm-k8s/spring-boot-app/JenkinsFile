@@ -2,31 +2,19 @@ pipeline {
     agent {
         docker {
             image 'shivakumarchincholi/maven-sample-docker-agent:v2'
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock -v $WORKSPACE:$WORKSPACE'
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
-
-    environment {
-        SONAR_URL = "http://35.154.115.75:9000"
-        GIT_USER_NAME = "Shivakumarchincholi"
-        GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
-        WORKSPACE_DIR = "${WORKSPACE}/java-maven-sonar-argocd-helm-k8s/spring-boot-app"
-        DOCKER_IMAGE = "shivakumarchincholi/ultimate-cicd:${BUILD_NUMBER}"
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                echo 'Code is checked out automatically'
             }
         }
-
         stage('Build and Test') {
             steps {
-                sh """
-                    cd ${WORKSPACE_DIR}
-                    mvn clean package
-                """
+                sh 'ls -ltr'
+                sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
             }
         }
 
