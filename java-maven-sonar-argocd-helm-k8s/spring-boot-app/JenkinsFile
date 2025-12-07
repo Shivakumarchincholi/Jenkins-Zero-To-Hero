@@ -2,13 +2,13 @@ pipeline {
     agent {
         docker {
             // Use the fixed Docker image built from the corrected Dockerfile (CMD ["bash"])
-            image 'shivakumarchincholi/maven-sample-docker-agent:v3'
+            image 'shivakumarchincholi/maven-sample-docker-agent:v2'
             args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
     environment {
-        SONAR_URL     = "http://35.154.115.75:9000"
+        SONAR_URL     = "http://52.66.85.62:9000"
         GIT_USER_NAME = "Shivakumarchincholi"
         GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
     }
