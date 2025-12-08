@@ -86,10 +86,10 @@ pipeline {
                         git commit -m "Update image version ${BUILD_NUMBER}" || echo "Nothing to commit"
 
                         # Push using GIT_ASKPASS
-                        export GIT_ASKPASS=$(mktemp)
-                        echo "echo ${GITHUB_TOKEN}" > $GIT_ASKPASS
-                        chmod +x $GIT_ASKPASS
-                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                       # export GIT_ASKPASS=$(mktemp)
+                        #echo "echo ${GITHUB_TOKEN}" > $GIT_ASKPASS
+                        #chmod +x $GIT_ASKPASS
+                        git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
                     '''
                 }
             }
