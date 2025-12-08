@@ -2,7 +2,7 @@ pipeline {
     agent {
         docker {
             image 'shivakumarchincholi/maven-sample-docker-agent:v6'
-            args '--user root -v /var/run/docker.sock:/var/run/docker.sock -v $WORKSPACE:$WORKSPACE -w $WORKSPACE'
+            args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
@@ -64,23 +64,35 @@ pipeline {
                 GIT_USER_NAME = "Shivakumarchincholi"
             }
             steps {
-                // Ensure Git repo is available in workspace
-                checkout scm
-
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    // Perform git checkout inside container for this stage only
                     sh '''
+                        # Ensure we are in the workspace
+                        pwd
+                        ls -la
+
+                        # If .git doesn't exist, do a shallow clone
+                        if [ ! -d ".git" ]; then
+                            echo "Cloning repository inside container..."
+                            git clone --depth 1 https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git .
+                        fi
+
+                        # Configure Git
                         git config user.email "schincholi08@gmail.com"
                         git config user.name "Shivakumar"
 
+                        # Update deployment YAML
                         sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" \
                         java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
 
+                        # Commit and push changes
                         git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                        git commit -m "Update image version ${BUILD_NUMBER}"
+                        git commit -m "Update image version ${BUILD_NUMBER}" || echo "Nothing to commit"
                         git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                     '''
                 }
             }
         }
+
     }
 }
